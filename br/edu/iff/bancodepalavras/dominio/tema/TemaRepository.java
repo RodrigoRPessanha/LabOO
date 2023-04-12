@@ -1,5 +1,17 @@
 package br.edu.iff.bancodepalavras.dominio.tema;
 
-public class TemaRepository {
+import br.edu.iff.repository.RepositoryException;
 
+public interface TemaRepository {
+    public Tema getPorId(long id);
+
+    public Tema[] getPorNome(Tema tema);
+
+    public Tema[] getTodos();
+
+    public void inserir(Tema tema) throws RepositoryException;
+
+    public void atualizar(Tema tema) throws RepositoryException;
+
+    public void remover(Tema tema) throws RepositoryException;
 }
