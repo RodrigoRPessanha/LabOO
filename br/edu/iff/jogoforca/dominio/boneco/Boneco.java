@@ -1,5 +1,6 @@
 package br.edu.iff.jogoforca.dominio.boneco;
 
-public class Boneco {
-
+public interface Boneco {
+    void exibir(Object contexto, int partes);
 }
+
