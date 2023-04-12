@@ -1,9 +1,12 @@
 package br.edu.iff.jogoforca.dominio.boneco.texto;
 
+import br.edu.iff.jogoforca.dominio.boneco.Boneco;
+
 public class BonecoTexto implements Boneco {
     private static BonecoTexto soleInstance = new BonecoTexto();
 
-    private BonecoTexto() {}
+    private BonecoTexto() {
+    }
 
     public static BonecoTexto getSoleInstance() {
         return soleInstance;
@@ -14,4 +17,3 @@ public class BonecoTexto implements Boneco {
         // Implementação da exibição do boneco como texto
     }
 }
-
