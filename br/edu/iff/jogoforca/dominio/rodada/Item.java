@@ -2,6 +2,9 @@ package br.edu.iff.jogoforca.dominio.rodada;
 
 import java.util.Arrays;
 
+import br.edu.iff.bancodepalavras.dominio.letra.Letra;
+import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
+
 public class Item {
     private int id;
     private Palavra palavra;
@@ -97,4 +100,3 @@ public class Item {
     public Palavra getPalavra() {
         return palavra;
     }
-
