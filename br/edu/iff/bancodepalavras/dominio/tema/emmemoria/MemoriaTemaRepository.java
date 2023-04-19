@@ -2,25 +2,39 @@ package br.edu.iff.bancodepalavras.dominio.tema.emmemoria;
 
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaTemaRepository implements TemaRepository {
 
-    public MemoriaTemaRepository(MemoriaTemaRepository soleInstance) {
-        this.soleInstance = soleInstance;
+    private static MemoriaTemaRepository soleInstance = null;
+    private List<Tema> pool;
+
+    private MemoriaTemaRepository() {
+        this.pool = new ArrayList<Tema>();
     }
 
-    private MemoriaTemaRepository soleInstance;
-
     public MemoriaTemaRepository getSoleInstance() {
-        MemoriaTemaRepository sole = this.soleInstance;
-        return sole;
+        if (soleInstance == null) {
+            this.soleInstance = soleInstance;
+        }
+        return this.soleInstance;
     }
 
     @Override
     public Tema getPorId(long id) {
-        return null;
+        try {
+            for (Tema tema : this.pool) {
+                if (tema.getId() == id) {
+                    return tema;
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
+        }
     }
 
     @Override

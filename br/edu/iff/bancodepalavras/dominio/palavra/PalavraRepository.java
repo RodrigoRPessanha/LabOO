@@ -1,14 +1,16 @@
 package br.edu.iff.bancodepalavras.dominio.palavra;
 
+import java.util.List;
+
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.repository.RepositoryException;
 
-public interface PalavraRepository {
+public interface PalavraRepository extends br.edu.iff.repository.Repository {
     public Palavra getPorId(long id);
 
-    public Palavra[] getPorTema(Tema tema);
+    public List<Palavra> getPorTema(Tema tema);
 
-    public Palavra[] getTodas();
+    public List<Palavra> getTodas();
 
     public Palavra getPalavra(String palavra);
 
@@ -17,4 +19,6 @@ public interface PalavraRepository {
     public void atualizar(Palavra palavra) throws RepositoryException;
 
     public void remover(Palavra palavra) throws RepositoryException;
+
+    public long getProximoId();
 }
