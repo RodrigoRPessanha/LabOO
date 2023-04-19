@@ -1,5 +1,8 @@
 package br.edu.iff.bancodepalavras.dominio.palavra.embdr;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraRepository;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
@@ -7,15 +10,18 @@ import br.edu.iff.repository.RepositoryException;
 
 public class BDRPalavraRepository implements PalavraRepository {
 
-    public BDRPalavraRepository(BDRPalavraRepository soleInstance) {
-        this.soleInstance = soleInstance;
+    private static BDRPalavraRepository soleInstance = null;
+    private List<Palavra> pool;
+
+    private BDRPalavraRepository() {
+        this.pool = new ArrayList<Palavra>();
     }
 
-    private BDRPalavraRepository soleInstance;
-
     public BDRPalavraRepository getSoleInstance() {
-        BDRPalavraRepository sole = this.soleInstance;
-        return sole;
+        if (soleInstance == null) {
+            this.soleInstance = soleInstance;
+        }
+        return this.soleInstance;
     }
 
     @Override
