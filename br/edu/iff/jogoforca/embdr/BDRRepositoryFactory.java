@@ -12,31 +12,40 @@ import br.edu.iff.jogoforca.dominio.rodada.embdr.BDRRodadaRepository;
 
 public class BDRRepositoryFactory implements RepositoryFactory {
 
-    public BDRRepositoryFactory() {
+    private static BDRRepositoryFactory soleInstance = null;
+
+    private BDRRepositoryFactory() {
     }
 
-    public BDRRepositoryFactory getSoleInstance() {
-        return null;
+    public static BDRRepositoryFactory getSoleInstance() {
+        if (soleInstance == null) {
+            soleInstance = new BDRRepositoryFactory();
+        }
+        return soleInstance;
     }
 
     @Override
     public PalavraRepository getPalavraRepository() {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPalavraRepository'");
     }
 
     @Override
     public TemaRepository getTemaRepository() {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTemaRepository'");
     }
 
     @Override
     public RodadaRepository getRodadaRepository() {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRodadaRepository'");
     }
 
     @Override
     public JogadorRepository getJogadorRepository() {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getJogadorRepository'");
     }
 
 }

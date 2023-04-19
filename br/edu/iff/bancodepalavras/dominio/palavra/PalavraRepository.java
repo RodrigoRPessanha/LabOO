@@ -20,5 +20,6 @@ public interface PalavraRepository extends br.edu.iff.repository.Repository {
 
     public void remover(Palavra palavra) throws RepositoryException;
 
+    @Override
     public long getProximoId();
 }

@@ -17,43 +17,59 @@ public class BDRPalavraRepository implements PalavraRepository {
         this.pool = new ArrayList<Palavra>();
     }
 
-    public BDRPalavraRepository getSoleInstance() {
+    public static BDRPalavraRepository getSoleInstance() {
         if (soleInstance == null) {
-            this.soleInstance = soleInstance;
+            soleInstance = new BDRPalavraRepository();
         }
-        return this.soleInstance;
+        return soleInstance;
     }
 
     @Override
     public Palavra getPorId(long id) {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPorId'");
     }
 
     @Override
-    public Palavra[] getPorTema(Tema tema) {
-        return null;
+    public List<Palavra> getPorTema(Tema tema) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPorTema'");
     }
 
     @Override
-    public Palavra[] getTodas() {
-        return null;
+    public List<Palavra> getTodas() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTodas'");
     }
 
     @Override
     public Palavra getPalavra(String palavra) {
-        return null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPalavra'");
     }
 
     @Override
     public void inserir(Palavra palavra) throws RepositoryException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
     }
 
     @Override
     public void atualizar(Palavra palavra) throws RepositoryException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
     }
 
     @Override
     public void remover(Palavra palavra) throws RepositoryException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'remover'");
+    }
+
+    @Override
+    public long getProximoId() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProximoId'");
     }
 
 }

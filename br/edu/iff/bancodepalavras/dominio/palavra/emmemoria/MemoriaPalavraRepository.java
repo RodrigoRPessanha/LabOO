@@ -18,37 +18,35 @@ public class MemoriaPalavraRepository implements PalavraRepository {
         this.pool = new ArrayList<Palavra>();
     }
 
-    public MemoriaPalavraRepository getSoleInstance() {
+    public static MemoriaPalavraRepository getSoleInstance() {
         if (soleInstance == null) {
-            this.soleInstance = soleInstance;
+            soleInstance = new MemoriaPalavraRepository();
         }
-        return this.soleInstance;
+        return soleInstance;
     }
 
     @Override
     public Palavra getPorId(long id) {
-        try {
-            for (Palavra palavra : this.pool) {
-                if (palavra.getId() == id) {
-                    return palavra;
-                }
+        for (Palavra palavra : this.pool) {
+            if (palavra.getId() == id) {
+                return palavra;
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
         }
+        throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
     }
 
     @Override
     public List<Palavra> getPorTema(Tema tema) {
-        try {
-            List<Palavra> palavraList = new ArrayList<>();
-            for (Palavra palavra : this.pool) {
-                if (palavra.getTema() == tema) {
-                    palavraList.add(palavra);
-                }
+
+        List<Palavra> palavraList = new ArrayList<>();
+        for (Palavra palavra : this.pool) {
+            if (palavra.getTema() == tema) {
+                palavraList.add(palavra);
             }
+        }
+        if (!palavraList.isEmpty()) {
             return palavraList;
-        } catch (Exception e) {
+        } else {
             throw new RuntimeException("Não existe nenhuma palavra com o Tema: " + tema);
         }
     }
@@ -60,15 +58,15 @@ public class MemoriaPalavraRepository implements PalavraRepository {
 
     @Override
     public Palavra getPalavra(String palavra) {
-        try {
-            for (Palavra palavraList : this.pool) {
-                if (palavraList.comparar(palavra)) {
-                    return palavraList;
-                }
+
+        for (Palavra palavraList : this.pool) {
+            if (palavraList.comparar(palavra)) {
+                return palavraList;
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Não existe essa" + palavra + "no repositório:");
         }
+
+        throw new RuntimeException("Não existe a seguinte palavra: " + palavra + "no repositório:");
+
     }
 
     @Override
@@ -80,7 +78,7 @@ public class MemoriaPalavraRepository implements PalavraRepository {
     @Override
     public void inserir(Palavra palavra) throws RepositoryException {
         if (this.pool.contains(palavra)) {
-            throw new RepositoryException("Não existe essa" + palavra + "na pool");
+            throw new RepositoryException("Já existe a seguinte palavra: " + palavra + "no repositório");
         } else {
             this.pool.add(palavra);
         }
@@ -96,7 +94,7 @@ public class MemoriaPalavraRepository implements PalavraRepository {
         if (this.pool.contains(palavra)) {
             this.pool.remove(palavra);
         } else {
-            System.out.printf("Não existe essa" + palavra + " na pool");
+            throw new RepositoryException("Não existe a seguinte palavra: " + palavra + " nno repositório");
         }
     }
 

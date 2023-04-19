@@ -3,6 +3,7 @@ package br.edu.iff.bancodepalavras.dominio.tema.emmemoria;
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
@@ -17,38 +18,56 @@ public class MemoriaTemaRepository implements TemaRepository {
         this.pool = new ArrayList<Tema>();
     }
 
-    public MemoriaTemaRepository getSoleInstance() {
+    public static MemoriaTemaRepository getSoleInstance() {
         if (soleInstance == null) {
-            this.soleInstance = soleInstance;
+            soleInstance = new MemoriaTemaRepository()
         }
-        return this.soleInstance;
+        return soleInstance;
     }
 
     @Override
     public Tema getPorId(long id) {
-        try {
-            for (Tema tema : this.pool) {
-                if (tema.getId() == id) {
-                    return tema;
-                }
+        for (Tema tema : this.pool) {
+            if (tema.getId() == id) {
+                return tema;
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
+        }
+        throw new RuntimeException("Não existe nenhum tema com o id: " + id);
+    }
+
+    @Override
+    public List<Tema> getPorNome(String nome) {
+        List<Tema> temaList = new ArrayList<>();
+        for (Tema tema : this.pool) {
+            if (tema.getNome().toUpperCase() == nome.toUpperCase()) {
+                temaList.add(tema);
+            }
+        }
+        if (!temaList.isEmpty()) {
+            return temaList;
+        } else {
+            throw new RuntimeException("Não existe nenhum tema com o nome: " + nome);
         }
     }
 
     @Override
-    public Tema[] getPorNome(Tema tema) {
-        return null;
+    public List<Tema> getTodos() {
+        return Collections.unmodifiableList(this.pool);
     }
 
     @Override
-    public Tema[] getTodos() {
-        return null;
+    public long getProximoId() {
+        int novaProxId = pool.size() + 1;
+        return novaProxId;
     }
 
     @Override
     public void inserir(Tema tema) throws RepositoryException {
+        if (this.pool.contains(tema)) {
+            throw new RepositoryException("Já existe o seguinte tema: " + tema.getNome() + " no repositório");
+        } else {
+            this.pool.add(tema);
+        }
     }
 
     @Override
@@ -57,6 +76,11 @@ public class MemoriaTemaRepository implements TemaRepository {
 
     @Override
     public void remover(Tema tema) throws RepositoryException {
+        if (this.pool.contains(tema)) {
+            this.pool.remove(tema);
+        } else {
+            throw new RepositoryException("Não existe o seguinte tema:" + tema.getNome() + " no repositório");
+        }
     }
 
 }
