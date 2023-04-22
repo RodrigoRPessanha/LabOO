@@ -20,33 +20,37 @@ public class MemoriaTemaRepository implements TemaRepository {
 
     public static MemoriaTemaRepository getSoleInstance() {
         if (soleInstance == null) {
-            soleInstance = new MemoriaTemaRepository()
+            soleInstance = new MemoriaTemaRepository();
         }
         return soleInstance;
     }
 
     @Override
     public Tema getPorId(long id) {
-        for (Tema tema : this.pool) {
-            if (tema.getId() == id) {
-                return tema;
+        try {
+            for (Tema tema : this.pool) {
+                if (tema.getId() == id) {
+                    return tema;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhum tema com o id: " + id);
+        return null;
     }
 
     @Override
     public List<Tema> getPorNome(String nome) {
         List<Tema> temaList = new ArrayList<>();
-        for (Tema tema : this.pool) {
-            if (tema.getNome().toUpperCase() == nome.toUpperCase()) {
-                temaList.add(tema);
+        try {
+            for (Tema tema : this.pool) {
+                if (tema.getNome().toUpperCase() == nome.toUpperCase()) {
+                    temaList.add(tema);
+                }
             }
-        }
-        if (!temaList.isEmpty()) {
             return temaList;
-        } else {
-            throw new RuntimeException("Não existe nenhum tema com o nome: " + nome);
+        } catch (Exception e) {
+            return temaList;
         }
     }
 

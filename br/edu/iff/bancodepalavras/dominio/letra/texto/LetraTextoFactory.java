@@ -4,18 +4,21 @@ import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.letra.LetraFactoryImpl;
 
 public class LetraTextoFactory extends LetraFactoryImpl {
-    LetraTextoFactory soleInstance;
+    private static LetraTextoFactory soleInstance = null;
 
     public LetraTextoFactory() {
     }
 
-    public LetraTextoFactory(LetraTextoFactory soleInstance) {
-        this.soleInstance = soleInstance;
+    public static LetraTextoFactory getSoleInstance() {
+        if (soleInstance == null) {
+            soleInstance = new LetraTextoFactory();
+        }
+
+        return soleInstance;
     }
 
     @Override
-    protected Letra criarLetra() {
-        // TODO Auto-generated method stub
-        return super.criarLetra();
+    protected Letra criarLetra(char codigo) {
+        return new LetraTexto(codigo);
     }
 }

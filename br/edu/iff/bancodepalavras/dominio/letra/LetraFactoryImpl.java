@@ -1,24 +1,36 @@
 package br.edu.iff.bancodepalavras.dominio.letra;
 
-public class LetraFactoryImpl implements LetraFactory {
+public abstract class LetraFactoryImpl implements LetraFactory {
 
-    public LetraFactoryImpl() {
-    }
+    private Letra[] pool;
 
-    protected Letra criarLetra() {
-        return null;
+    private Letra encoberta;
+
+    protected LetraFactoryImpl() {
+        this.pool = new Letra[26];
+        this.encoberta = null;
     }
 
     @Override
     public final Letra getLetra(char codigo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLetra'");
+        int i = codigo - 'a';
+        Letra result = this.pool[i];
+        if (result == null) {
+            result = this.criarLetra(codigo);
+            this.pool[i] = result;
+        }
+        return result;
     }
+
+    protected abstract Letra criarLetra(char codigo);
 
     @Override
     public final Letra getLetraEncoberta() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLetraEncoberta'");
+        if (encoberta == null) {
+            char codigo = '?';
+            this.encoberta = criarLetra(codigo);
+        }
+        return this.encoberta;
     }
 
 }

@@ -27,28 +27,32 @@ public class MemoriaPalavraRepository implements PalavraRepository {
 
     @Override
     public Palavra getPorId(long id) {
-        for (Palavra palavra : this.pool) {
-            if (palavra.getId() == id) {
-                return palavra;
+        try {
+            for (Palavra palavra : this.pool) {
+                if (palavra.getId() == id) {
+                    return palavra;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
+        return null;
     }
 
     @Override
     public List<Palavra> getPorTema(Tema tema) {
-
         List<Palavra> palavraList = new ArrayList<>();
-        for (Palavra palavra : this.pool) {
-            if (palavra.getTema() == tema) {
-                palavraList.add(palavra);
+        try {
+            for (Palavra palavra : this.pool) {
+                if (palavra.getTema() == tema) {
+                    palavraList.add(palavra);
+                }
             }
-        }
-        if (!palavraList.isEmpty()) {
             return palavraList;
-        } else {
-            throw new RuntimeException("Não existe nenhuma palavra com o Tema: " + tema);
+        } catch (Exception e) {
+            return palavraList;
         }
+
     }
 
     @Override

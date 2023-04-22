@@ -25,26 +25,30 @@ public class MemoriaJogadorRepository implements JogadorRepository {
 
     @Override
     public Jogador getPorId(long id) {
-        for (Jogador jogador : this.pool) {
-            if (jogador.getId() == id) {
-                return jogador;
+        try {
+            for (Jogador jogador : this.pool) {
+                if (jogador.getId() == id) {
+                    return jogador;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhuma rodada com o id: " + id);
+        return null;
     }
 
     @Override
     public List<Jogador> getPorNome(String nome) {
         List<Jogador> jogadorList = new ArrayList<>();
-        for (Jogador jogador : this.pool) {
-            if (jogador.getNome().equalsIgnoreCase(nome)) {
-                jogadorList.add(jogador);
+        try {
+            for (Jogador jogador : this.pool) {
+                if (jogador.getNome().equalsIgnoreCase(nome)) {
+                    jogadorList.add(jogador);
+                }
             }
-        }
-        if (!jogadorList.isEmpty()) {
             return jogadorList;
-        } else {
-            throw new RuntimeException("Não existe nenhum jogador com o seguinte nome: " + nome);
+        } catch (Exception e) {
+            return jogadorList;
         }
     }
 

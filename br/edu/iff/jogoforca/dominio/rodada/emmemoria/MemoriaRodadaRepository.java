@@ -26,26 +26,30 @@ public class MemoriaRodadaRepository implements RodadaRepository {
 
     @Override
     public Rodada getPorId(long id) {
-        for (Rodada rodada : this.pool) {
-            if (rodada.getId() == id) {
-                return rodada;
+        try {
+            for (Rodada rodada : this.pool) {
+                if (rodada.getId() == id) {
+                    return rodada;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhuma rodada com o id: " + id);
+        return null;
     }
 
     @Override
     public List<Rodada> getPorJogador(Jogador jogador) {
         List<Rodada> rodadaList = new ArrayList<>();
-        for (Rodada rodada : this.pool) {
-            if (rodada.getJogador() == jogador) {
-                rodadaList.add(rodada);
+        try {
+            for (Rodada rodada : this.pool) {
+                if (rodada.getJogador() == jogador) {
+                    rodadaList.add(rodada);
+                }
             }
-        }
-        if (!rodadaList.isEmpty()) {
             return rodadaList;
-        } else {
-            throw new RuntimeException("Não existe nenhuma rodada com o seguinte jogador: " + jogador);
+        } catch (Exception e) {
+            return rodadaList;
         }
     }
 
