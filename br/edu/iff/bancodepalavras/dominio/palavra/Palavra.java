@@ -51,7 +51,7 @@ public class Palavra extends br.edu.iff.dominio.ObjetoDominioImpl{
 		return criarPalavra;
 	}
 
-	public static Palavra reconstruir(Long id, String palavra, Tema tema) {
+	public static Palavra reconstituir(Long id, String palavra, Tema tema) {
 		Palavra criarPalavra = new Palavra(id, palavra, tema);
 		return criarPalavra;
 	}
@@ -65,13 +65,13 @@ public class Palavra extends br.edu.iff.dominio.ObjetoDominioImpl{
 
 	}
 
-	public void exibir(Object object) {
+	public void exibir(Object contexto) {
 		for(Letra letraTemp: palavra) {
 			letraTemp.exibir(null);
 		}
 	}
 
-	public void exibir(Object object, List<Boolean> posicoes) {
+	public void exibir(Object contexto, List<Boolean> posicoes) {
 		if(posicoes.size() != palavra.size()) {
 			throw new RuntimeException("Ocorreu um erro na exibição da palavra");
 
