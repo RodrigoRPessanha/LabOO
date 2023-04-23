@@ -1,35 +1,55 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 
-public class Item {
-    private int id;
+public class Item extends br.edu.iff.dominio.ObjetoDominioImpl{
     private Palavra palavra;
-    private boolean[] posicoesDescobertas;
+    private List<Boolean> posicoesDescobertas;
     private String palavraArriscada;
 
-    public Item(int id, Palavra palavra) {
-        this.id = id;
+    private Item(int id, Palavra palavra) {
+		super(id);
         this.palavra = palavra;
-        this.posicoesDescobertas = new boolean[palavra.getTamanho()];
+    }
+	
+	static Item criar(int id, Palavra palavra){
+        Item item = new Item(id, palavra);
+        return item;
+	}
+
+    public static Item reconstituir(int id, Palavra palavra, List<Boolean> posicoesDescobertas, String palavraArriscada){
+        Item item = new Item(id, palavra, posicoesDescobertas, palavraArriscada);
+        return item;
     }
 
-    public Item(int id, Palavra palavra, boolean[] posicoesDescobertas, String palavraArriscada) {
-        this.id = id;
+	private Item(int id, Palavra palavra, List<Boolean> posicoesDescobertas, String palavraArriscada) {
+        super(id);
         this.palavra = palavra;
         this.posicoesDescobertas = posicoesDescobertas;
         this.palavraArriscada = palavraArriscada;
     }
 
-    public void arriscar(String palavraArriscada) {
+    void arriscar(String palavraArriscada) {
         this.palavraArriscada = palavraArriscada;
     }
 
     public boolean acertou() {
-        return palavraArriscada != null && palavraArriscada.equalsIgnoreCase(palavra.getPalavra());
+        return arriscou() ? palavra.comparar(palavraArriscada) : false;
+    }
+
+    public boolean descobriu(){
+        if (acertou() || qtdeLetrasEncobertas() == 0){
+            return true;
+        }
+        return false;
+    }
+
+    public void exibir(Object contexto){
+        palavra.exibir(contexto, posicoesDescobertas);
     }
 
     public boolean arriscou() {
@@ -40,15 +60,17 @@ public class Item {
         return palavraArriscada;
     }
 
-    public boolean tentar(char codigo) {
-        boolean acertou = false;
-        for (int i = 0; i < palavra.getTamanho(); i++) {
-            if (palavra.getLetra(i).getCodigo() == codigo) {
-                posicoesDescobertas[i] = true;
-                acertou = true;
-            }
+    boolean tentar(char codigo) {
+        List<Integer> posicoes = palavra.tentar(codigo);
+
+        if(posicoes.size() == 0) {
+            return false;
         }
-        return acertou;
+        for(Integer posicaoTemp: posicoes) {
+            posicoesDescobertas.set(posicaoTemp, true);
+        }
+
+        return true;
     }
 
     public int calcularPontosLetrasEncobertas(int valorPorLetraEncoberta) {
@@ -71,32 +93,27 @@ public class Item {
         return qtde;
     }
 
-    public Letra[] getLetrasEncobertas() {
-        Letra[] letrasEncobertas = new Letra[qtdeLetrasEncobertas()];
-        int i = 0;
-        for (int j = 0; j < posicoesDescobertas.length; j++) {
-            if (!posicoesDescobertas[j]) {
-                continue;
+    public List<Letra> getLetrasEncobertas() {
+        List<Letra> encobertas = new ArrayList<>();
+        for (int i = 0; i < posicoesDescobertas.size(); i++) {
+            if (!posicoesDescobertas.get(i)) {
+                encobertas.add(palavra.getLetra(i));
             }
-            letrasEncobertas[i] = palavra.getLetra(j);
-            i++;
         }
-        return letrasEncobertas;
+        return encobertas;
     }
 
-    public Letra[] getLetrasDescobertas() {
-        Letra[] letrasDescobertas = new Letra[palavra.getTamanho() - qtdeLetrasEncobertas()];
-        int i = 0;
-        for (int j = 0; j < posicoesDescobertas.length; j++) {
-            if (posicoesDescobertas[j]) {
-                continue;
+    public List<Letra> getLetrasDescobertas() {
+        List<Letra> descobertas = new ArrayList<>();
+        for (int i = 0; i < posicoesDescobertas.size(); i++) {
+            if (posicoesDescobertas.get(i)) {
+                descobertas.add(palavra.getLetra(i));
             }
-            letrasDescobertas[i] = palavra.getLetra(j);
-            i++;
         }
-        return letrasDescobertas;
+        return descobertas;
     }
 
     public Palavra getPalavra() {
         return palavra;
     }
+}
