@@ -3,22 +3,27 @@ package br.edu.iff.jogoforca.dominio.boneco.texto;
 import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 
 public class BonecoTexto implements Boneco {
-    private static BonecoTexto soleInstance = new BonecoTexto();
+    private static BonecoTexto  soleInstance = null;
 
-    private BonecoTexto() {
-    }
-
-    public static BonecoTexto getSoleInstance() {
-        return soleInstance;
-    }
+	public static BonecoTexto getSoleInstance() {
+		if (soleInstance == null) {
+			soleInstance = new BonecoTexto();
+		}
+		return soleInstance;
+	}
+	private BonecoTexto() {
+	}
 
     @Override
     public void exibir(Object contexto, int partes) {
-        if (partes == 1) {
+        if (partes == 0) {
             System.out.println("||=====|");
             System.out.println("||     |");
-            System.out.println("||  (     )");
+            System.out.println("||");
+            System.out.println("||");
+        }
 
+        if (partes == 1) {
             System.out.println("||=====|");
             System.out.println("||     |");
             System.out.println("||  /     \\");

@@ -1,6 +1,5 @@
 package br.edu.iff.bancodepalavras.dominio.palavra.embdr;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
@@ -11,10 +10,8 @@ import br.edu.iff.repository.RepositoryException;
 public class BDRPalavraRepository implements PalavraRepository {
 
     private static BDRPalavraRepository soleInstance = null;
-    private List<Palavra> pool;
 
     private BDRPalavraRepository() {
-        this.pool = new ArrayList<Palavra>();
     }
 
     public static BDRPalavraRepository getSoleInstance() {

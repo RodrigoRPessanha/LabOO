@@ -18,20 +18,6 @@ public abstract class RodadaFactoryImpl extends br.edu.iff.factory.EntityFactory
 		this.palavraRepository = palavraRepository;
 	}
 
-    @Override
-    public Rodada getRodada(Jogador jogador) {
-        Rodada rodada = Rodada.criar(getProximoId(), jogador);
-
-		try {
-			getRodadaRepository().inserir(rodada);
-		} catch ( RepositoryException repositoryException) {
-			throw new RuntimeException ("Ocorreu um erro ao tentar armazenar a rodada");
-
-		}
-
-		return rodada;
-    }
-
     protected TemaRepository getTemaRepository() {
         TemaRepository tema = this.temaRepository;
         return tema;

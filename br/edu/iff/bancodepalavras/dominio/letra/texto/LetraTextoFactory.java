@@ -6,7 +6,7 @@ import br.edu.iff.bancodepalavras.dominio.letra.LetraFactoryImpl;
 public class LetraTextoFactory extends LetraFactoryImpl {
     private static LetraTextoFactory soleInstance = null;
 
-    public LetraTextoFactory() {
+    private LetraTextoFactory() {
     }
 
     public static LetraTextoFactory getSoleInstance() {

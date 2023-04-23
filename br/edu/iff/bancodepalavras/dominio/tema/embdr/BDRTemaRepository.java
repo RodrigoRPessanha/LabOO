@@ -2,7 +2,6 @@ package br.edu.iff.bancodepalavras.dominio.tema.embdr;
 
 import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
@@ -10,10 +9,8 @@ import br.edu.iff.repository.RepositoryException;
 
 public class BDRTemaRepository implements TemaRepository {
     private static BDRTemaRepository soleInstance = null;
-    private List<Tema> pool;
 
     private BDRTemaRepository() {
-        this.pool = new ArrayList<Tema>();
     }
 
     public static BDRTemaRepository getSoleInstance() {

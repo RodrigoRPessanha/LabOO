@@ -1,6 +1,5 @@
 package br.edu.iff.jogoforca.dominio.jogador.embdr;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
@@ -10,10 +9,8 @@ import br.edu.iff.repository.RepositoryException;
 public class BDRJogadorRepository implements JogadorRepository {
 
     private static BDRJogadorRepository soleInstance = null;
-    private List<Jogador> pool;
 
     private BDRJogadorRepository() {
-        this.pool = new ArrayList<Jogador>();
     }
 
     public static BDRJogadorRepository getSoleInstance() {
