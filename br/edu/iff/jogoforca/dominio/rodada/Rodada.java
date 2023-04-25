@@ -6,11 +6,12 @@ import java.util.List;
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.dominio.ObjetoDominioImpl;
 import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 
-public class Rodada extends br.edu.iff.dominio.ObjetoDominioImpl{
+public class Rodada extends ObjetoDominioImpl{
     private static int maxPalavras = 3;
     private static int maxErros = 10;
     private static int pontosQuandoDescobreTodasAsPalavras = 100;

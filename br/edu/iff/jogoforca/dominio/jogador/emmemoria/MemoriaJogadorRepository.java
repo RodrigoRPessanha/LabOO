@@ -9,13 +9,17 @@ import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaJogadorRepository implements JogadorRepository {
 
+    // Criação de uma única instância da classe MemoriaJogadorRepository, seguindo o padrão Singleton
     private static MemoriaJogadorRepository soleInstance = null;
+    // Lista de jogadores em memória
     private List<Jogador> pool;
 
+    // Construtor da classe que inicializa a lista de jogadores
     private MemoriaJogadorRepository() {
         this.pool = new ArrayList<Jogador>();
     }
 
+    // Método estático para obter a única instância da classe MemoriaJogadorRepository, seguindo o padrão Singleton
     public static MemoriaJogadorRepository getSoleInstance() {
         if (soleInstance == null) {
             soleInstance = new MemoriaJogadorRepository();
@@ -23,6 +27,7 @@ public class MemoriaJogadorRepository implements JogadorRepository {
         return soleInstance;
     }
 
+    // Retorna um jogador com o ID informado, se existir
     @Override
     public Jogador getPorId(long id) {
         try {
@@ -37,6 +42,7 @@ public class MemoriaJogadorRepository implements JogadorRepository {
         return null;
     }
 
+    // Retorna uma lista de jogadores associadas a um nome específico
     @Override
     public List<Jogador> getPorNome(String nome) {
         List<Jogador> jogadorList = new ArrayList<>();
@@ -52,12 +58,14 @@ public class MemoriaJogadorRepository implements JogadorRepository {
         }
     }
 
+    // Retorna o próximo ID disponível
     @Override
     public long getProximoId() {
         int novaProxId = pool.size() + 1;
         return novaProxId;
     }
 
+    // Insere um novo jogador na lista
     @Override
     public void inserir(Jogador jogador) throws RepositoryException {
         if (this.pool.contains(jogador)) {
@@ -67,12 +75,14 @@ public class MemoriaJogadorRepository implements JogadorRepository {
         }
     }
 
+    // Método para atualizar um jogador no repositório (não implementado)
     @Override
     public void atualizar(Jogador jogador) throws RepositoryException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
     }
 
+    // Método para remover um jogador do repositório
     @Override
     public void remover(Jogador jogador) throws RepositoryException {
         if (this.pool.contains(jogador)) {
