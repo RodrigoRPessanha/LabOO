@@ -1,8 +1,4 @@
 package br.edu.iff.jogoforca.dominio.jogador.embdr;
-
-import java.util.Collections;
-import java.util.List;
-
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
 import br.edu.iff.repository.RepositoryException;
