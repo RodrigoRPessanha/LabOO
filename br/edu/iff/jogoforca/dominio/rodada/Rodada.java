@@ -157,6 +157,15 @@ public class Rodada extends ObjetoDominioImpl{
         }
     }
 
+    /*  + calcularPontos() : int
+        + getErradas() : Letra[]
+        + getCertas() : Letra[]
+        + getTentativas() : Letra[]
+        + exibirLetrasErradas(contexto : Object) : void
+        + exibirPalavras(contexto : Object) : void
+        + exibirBoneco(contexto : Object) : void
+    */
+
     public boolean encerrou(){
         if (arriscou() || descobriu() || getQtdeErros() == maxErros) {
             return true;
