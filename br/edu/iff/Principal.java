@@ -49,12 +49,12 @@ public class Principal {
             System.out.println();
 
             // Exibe as palavras da rodada
-            System.out.println("Palavras:");
+            System.out.println("Palavra:");
             rodada.exibirItens(null);
             System.out.println();
 
             // Exibe as letras erradas da rodada
-            System.out.println("Letras Erradas:");
+            System.out.println("Letras Erradas já faladas:");
             rodada.exibirLetrasErradas(null);
             System.out.println();
 
@@ -64,8 +64,8 @@ public class Principal {
             System.out.println();
 
             // Exibe as opções para o usuário escolher
-            System.out.println("[1] Tentar");
-            System.out.println("[2] Arriscar");
+            System.out.println("1 - Tentar");
+            System.out.println("2 - Arriscar");
 
             // Lê a opção escolhida pelo usuário
             int option = tecladoInput.nextInt();
