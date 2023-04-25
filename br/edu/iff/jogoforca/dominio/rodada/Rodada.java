@@ -112,6 +112,9 @@ public class Rodada extends ObjetoDominioImpl {
         if (getBonecoFactory() == null) {
             throw new RuntimeException("Boneco não iniciado");
         }
+        for(int contador = 0; contador < palavras.size(); contador++) {
+			this.itens.add(Item.criar(contador, palavras.get(contador)));
+		}
     }
 
     // Construtor da classe Rodada
