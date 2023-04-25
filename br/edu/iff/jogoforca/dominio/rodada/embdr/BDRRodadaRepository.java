@@ -1,6 +1,6 @@
 package br.edu.iff.jogoforca.dominio.rodada.embdr;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
@@ -9,14 +9,14 @@ import br.edu.iff.jogoforca.dominio.rodada.RodadaRepository;
 import br.edu.iff.repository.RepositoryException;
 
 public class BDRRodadaRepository implements RodadaRepository {
-
+    // Define a única instância da classe BDRRodadaRepository, seguindo o padrão Singleton
     private static BDRRodadaRepository soleInstance = null;
-    private List<Rodada> pool;
 
+    // Construtor privado para evitar que outras classes instanciem essa classe diretamente
     private BDRRodadaRepository() {
-        this.pool = new ArrayList<Rodada>();
     }
 
+    // Método estático que retorna a única instância da classe BDRRodadaRepository, seguindo o padrão Singleton
     public static BDRRodadaRepository getSoleInstance() {
         if (soleInstance == null) {
             soleInstance = new BDRRodadaRepository();
@@ -26,38 +26,26 @@ public class BDRRodadaRepository implements RodadaRepository {
 
     @Override
     public Rodada getPorId(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPorId'");
-    }
+        return null;}
 
     @Override
     public List<Rodada> getPorJogador(Jogador jogador) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPorJogador'");
-    }
+        return Collections.emptyList();}
 
     @Override
     public void inserir(Rodada rodada) throws RepositoryException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'inserir'");
     }
 
     @Override
     public void atualizar(Rodada rodada) throws RepositoryException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
     }
 
     @Override
     public void remover(Rodada rodada) throws RepositoryException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remover'");
     }
 
     @Override
     public long getProximoId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProximoId'");
-    }
+        return (Long) null;}
 
 }

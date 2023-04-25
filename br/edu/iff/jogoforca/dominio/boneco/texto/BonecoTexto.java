@@ -3,22 +3,32 @@ package br.edu.iff.jogoforca.dominio.boneco.texto;
 import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 
 public class BonecoTexto implements Boneco {
-    private static BonecoTexto soleInstance = new BonecoTexto();
+    // Uma instância única da classe BonecoTexto, seguindo o padrão Singleton
+    private static BonecoTexto  soleInstance = null;
 
-    private BonecoTexto() {
-    }
+    // Método estático que retorna a única instância da classe BonecoTexto, seguindo o padrão Singleton
+	public static BonecoTexto getSoleInstance() {
+		if (soleInstance == null) {
+			soleInstance = new BonecoTexto();
+		}
+		return soleInstance;
+	}
 
-    public static BonecoTexto getSoleInstance() {
-        return soleInstance;
-    }
+    // Construtor privado para evitar que outras classes instanciem essa classe diretamente
+	private BonecoTexto() {
+	}
 
+    // Implementando o método exibir() definido na interface Boneco
     @Override
     public void exibir(Object contexto, int partes) {
-        if (partes == 1) {
+        if (partes == 0) {
             System.out.println("||=====|");
             System.out.println("||     |");
-            System.out.println("||  (     )");
+            System.out.println("||");
+            System.out.println("||");
+        }
 
+        if (partes == 1) {
             System.out.println("||=====|");
             System.out.println("||     |");
             System.out.println("||  /     \\");
