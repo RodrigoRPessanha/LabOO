@@ -24,8 +24,8 @@ public class Rodada extends ObjetoDominioImpl{
     private Set<Letra> erradas;
     private List<Palavra> palavras;
     private Jogador jogador;
-    private Boneco boneco;
     private Tema tema;
+    private Boneco boneco;
     
     public static int getMaxPalavras() {
         return maxPalavras;

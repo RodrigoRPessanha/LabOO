@@ -2,6 +2,7 @@ package br.edu.iff.jogoforca.dominio.rodada;
 
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
+import br.edu.iff.repository.RepositoryException;
 
 public class RodadaAppService {
 
@@ -26,8 +27,13 @@ public class RodadaAppService {
         }
     }
 
-    public boolean salvarRodada(Rodada rodada) {
-        return rodadaRepository.salvar(rodada);
+    public boolean salvarRodada(Rodada rodada) throws RepositoryException{
+        try {
+            rodada.inserir(rodada);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
     }
 
     public Rodada novaRodada(Jogador jogador) {
