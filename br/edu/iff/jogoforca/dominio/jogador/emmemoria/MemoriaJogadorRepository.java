@@ -44,17 +44,17 @@ public class MemoriaJogadorRepository implements JogadorRepository {
 
     // Retorna uma lista de jogadores associadas a um nome específico
     @Override
-    public List<Jogador> getPorNome(String nome) {
-        List<Jogador> jogadorList = new ArrayList<>();
+    public Jogador getPorNome(String nome) {
+        Jogador jogadorReturn = null;
         try {
             for (Jogador jogador : this.pool) {
                 if (jogador.getNome().equalsIgnoreCase(nome)) {
-                    jogadorList.add(jogador);
+                    jogadorReturn = jogador;
                 }
             }
-            return jogadorList;
+            return jogadorReturn;
         } catch (Exception e) {
-            return jogadorList;
+            return jogadorReturn;
         }
     }
 

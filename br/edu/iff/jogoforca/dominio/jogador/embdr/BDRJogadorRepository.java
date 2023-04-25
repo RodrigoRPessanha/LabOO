@@ -29,8 +29,8 @@ public class BDRJogadorRepository implements JogadorRepository {
     }
 
     @Override
-    public List<Jogador> getPorNome(String nome) {
-        return Collections.emptyList();
+    public Jogador getPorNome(String nome) {
+        return null;
     }
 
     @Override
