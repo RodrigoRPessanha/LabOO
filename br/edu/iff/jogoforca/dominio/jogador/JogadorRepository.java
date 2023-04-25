@@ -1,7 +1,5 @@
 package br.edu.iff.jogoforca.dominio.jogador;
 
-import java.util.List;
-
 import br.edu.iff.repository.Repository;
 import br.edu.iff.repository.RepositoryException;
 
@@ -10,7 +8,7 @@ public interface JogadorRepository extends Repository {
     public Jogador getPorId(long id);
 
     // Define o método para obter uma lista de jogadores pelo nome
-    public List<Jogador> getPorNome(String nome);
+    public Jogador getPorNome(String nome);
 
     // Define o método para inserir um jogador no repositório
     public void inserir(Jogador jogador) throws RepositoryException;
