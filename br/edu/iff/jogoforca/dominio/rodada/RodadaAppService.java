@@ -1,5 +1,6 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
+import br.edu.iff.jogoforca.JogadorNaoEncontradoException;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 import br.edu.iff.jogoforca.dominio.jogador.JogadorRepository;
 import br.edu.iff.repository.RepositoryException;
@@ -29,27 +30,34 @@ public class RodadaAppService {
 
     public boolean salvarRodada(Rodada rodada) throws RepositoryException{
         try {
-            rodada.inserir(rodada);
+            rodadaRepository.inserir(rodada);
+            return true;
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getMessage());
+            return false;
         }
-        return false;
     }
 
     public Rodada novaRodada(Jogador jogador) {
-        return rodadaFactory.criar(jogador);
+        try {
+			jogadorRepository.inserir(jogador);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+        
+        return rodadaFactory.getRodada(jogador);
     }
 
     public Rodada novaRodada(String nomeJogador) throws JogadorNaoEncontradoException {
-        Jogador jogador = jogadorRepository.buscarPorNome(nomeJogador);
+        Jogador jogador = jogadorRepository.getPorNome(nomeJogador);
         if (jogador == null) {
             throw new JogadorNaoEncontradoException(nomeJogador);
         }
-        return rodadaFactory.criar(jogador);
+        return rodadaFactory.getRodada(jogador);
     }
 
     public Rodada novaRodada(long idJogador) {
-        Jogador jogador = jogadorRepository.buscarPorId(idJogador);
-        return rodadaFactory.criar(jogador);
+        Jogador jogador = jogadorRepository.getPorId(idJogador);
+        return rodadaFactory.getRodada(jogador);
     }
 }
