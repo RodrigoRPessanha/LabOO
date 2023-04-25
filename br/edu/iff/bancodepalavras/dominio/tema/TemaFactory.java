@@ -1,5 +1,6 @@
 package br.edu.iff.bancodepalavras.dominio.tema;
 
-public class TemaFactory {
-
+public interface TemaFactory {
+    // Este método retorna um objeto Tema com base no nome do tema fornecido como parâmetro
+    public Tema getTema(String nome);
 }

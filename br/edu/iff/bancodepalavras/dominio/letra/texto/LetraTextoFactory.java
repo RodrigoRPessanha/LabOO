@@ -4,18 +4,27 @@ import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.letra.LetraFactoryImpl;
 
 public class LetraTextoFactory extends LetraFactoryImpl {
-    LetraTextoFactory soleInstance;
+    
+    // Define a única instância da classe LetraImagemFactory, seguindo o padrão Singleton
+    private static LetraTextoFactory soleInstance = null;
 
-    public LetraTextoFactory() {
+    // Construtor privado para evitar que outras classes instanciem essa classe diretamente
+    private LetraTextoFactory() {
     }
 
-    public LetraTextoFactory(LetraTextoFactory soleInstance) {
-        this.soleInstance = soleInstance;
+    // Método estático que retorna a única instância da classe LetraImagemFactory, seguindo o padrão Singleton
+    public static LetraTextoFactory getSoleInstance() {
+        // Verifica se a instância já foi criada
+        if (soleInstance == null) {
+            soleInstance = new LetraTextoFactory();
+        }
+
+        return soleInstance;
     }
 
+    // Implementa o método criarLetra da classe pai (LetraFactoryImpl)
     @Override
-    protected Letra criarLetra() {
-        // TODO Auto-generated method stub
-        return super.criarLetra();
+    protected Letra criarLetra(char codigo) {
+        return new LetraTexto(codigo);
     }
 }

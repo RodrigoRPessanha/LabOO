@@ -2,6 +2,9 @@ package br.edu.iff.bancodepalavras.dominio.palavra;
 
 import java.util.List;
 
+import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.bancodepalavras.dominio.tema.TemaRepository;
+
 public class PalavraAppService {
 
   private static PalavraAppService soleInstance;
@@ -30,38 +33,41 @@ public class PalavraAppService {
   }
 
   public boolean novaPalavra(String palavra, long idTema) {
-    Tema tema = temaRepository.getTemaById(idTema);
+    Tema tema = temaRepository.getPorId(idTema);
     if (tema == null) {
       return false;
     }
-    Palavra novaPalavra = palavraFactory.criarPalavra(palavra, tema);
-    palavraRepository.salvarPalavra(novaPalavra);
-    return true;
+    Palavra novaPalavra = palavraFactory.getPalavra(palavra, tema);
+    try {
+			palavraRepository.inserir(novaPalavra);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
   }
   
   public List<Palavra> buscarPalavrasPorTema(Tema tema) {
-	  return palavraRepository.buscarPalavrasPorTema(tema);
+	  return palavraRepository.getPorTema(tema);
 	}
 
 	public Palavra buscarPalavraPorId(long idPalavra) {
-	  return palavraRepository.buscarPalavraPorId(idPalavra);
+	  return palavraRepository.getPorId(idPalavra);
 	}
 
 	public boolean atualizarPalavra(long idPalavra, String novaPalavra) {
-	  Palavra palavra = palavraRepository.buscarPalavraPorId(idPalavra);
-	  if (palavra == null) {
-	    return false;
-	  }
-	  palavra.setNome(novaPalavra);
-	  palavraRepository.atualizarPalavra(palavra);
 	  return true;
 	}
 
 	public boolean removerPalavra(long idPalavra) {
-	  Palavra palavra = palavraRepository.buscarPalavraPorId(idPalavra);
+	  Palavra palavra = palavraRepository.getPorId(idPalavra);
 	  if (palavra == null) {
 	    return false;
 	  }
-	  palavraRepository.removerPalavra(palavra);
-	  return true;
+	  try {
+			palavraRepository.remover(palavra);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
+}

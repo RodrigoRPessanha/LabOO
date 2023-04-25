@@ -1,18 +1,21 @@
 package br.edu.iff.jogoforca.dominio.jogador;
 
-public class Jogador {
+import br.edu.iff.dominio.ObjetoDominioImpl;
+
+public class Jogador extends ObjetoDominioImpl{
     private long id;
     private int pontuacao = 0;
     private String nome;
 
     private Jogador(long id, String nome, int pontuacao) {
-        this.id = id;
+        super(id);
         this.nome = nome;
         this.pontuacao = pontuacao;
     }
 
     private Jogador(long id, String nome) {
-        this(id, nome, 0);
+        super(id);
+        this.nome = nome;;
     }
 
     public static Jogador reconstituir(long id, String nome, int pontuacao) {
@@ -37,5 +40,13 @@ public class Jogador {
 
     public String getNome() {
         return nome;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

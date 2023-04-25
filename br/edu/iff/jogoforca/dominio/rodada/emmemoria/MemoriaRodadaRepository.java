@@ -10,13 +10,17 @@ import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaRodadaRepository implements RodadaRepository {
 
+    // Criação de uma única instância da classe MemoriaRodadaRepository, seguindo o padrão Singleton
     private static MemoriaRodadaRepository soleInstance = null;
+     // Lista de rodadas em memória
     private List<Rodada> pool;
 
+    // Construtor da classe que inicializa a lista de rodadas
     private MemoriaRodadaRepository() {
         this.pool = new ArrayList<Rodada>();
     }
 
+    // Método estático para obter a única instância da classe MemoriaRodadaRepository, seguindo o padrão Singleton
     public static MemoriaRodadaRepository getSoleInstance() {
         if (soleInstance == null) {
             soleInstance = new MemoriaRodadaRepository();
@@ -24,37 +28,45 @@ public class MemoriaRodadaRepository implements RodadaRepository {
         return soleInstance;
     }
 
+    // Retorna uma rodada com o ID informado, se existir
     @Override
     public Rodada getPorId(long id) {
-        for (Rodada rodada : this.pool) {
-            if (rodada.getId() == id) {
-                return rodada;
+        try {
+            for (Rodada rodada : this.pool) {
+                if (rodada.getId() == id) {
+                    return rodada;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhuma rodada com o id: " + id);
+        return null;
     }
 
+    // Retorna uma lista de rodadas associadas a um jogador específico
     @Override
     public List<Rodada> getPorJogador(Jogador jogador) {
         List<Rodada> rodadaList = new ArrayList<>();
-        for (Rodada rodada : this.pool) {
-            if (rodada.getJogador() == jogador) {
-                rodadaList.add(rodada);
+        try {
+            for (Rodada rodada : this.pool) {
+                if (rodada.getJogador() == jogador) {
+                    rodadaList.add(rodada);
+                }
             }
-        }
-        if (!rodadaList.isEmpty()) {
             return rodadaList;
-        } else {
-            throw new RuntimeException("Não existe nenhuma rodada com o seguinte jogador: " + jogador);
+        } catch (Exception e) {
+            return rodadaList;
         }
     }
 
+    // Retorna o próximo ID disponível
     @Override
     public long getProximoId() {
         int novaProxId = pool.size() + 1;
         return novaProxId;
     }
 
+    // Insere uma nova rodada na lista
     @Override
     public void inserir(Rodada rodada) throws RepositoryException {
         if (this.pool.contains(rodada)) {
@@ -64,10 +76,11 @@ public class MemoriaRodadaRepository implements RodadaRepository {
         }
     }
 
+    // Método para atualizar uma rodada no repositório (não implementado)
     @Override
     public void atualizar(Rodada rodada) throws RepositoryException {
     }
-
+    // Método para remover uma rodada do repositório
     @Override
     public void remover(Rodada rodada) throws RepositoryException {
         if (this.pool.contains(rodada)) {

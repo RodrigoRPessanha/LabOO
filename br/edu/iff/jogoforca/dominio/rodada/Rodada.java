@@ -1,154 +1,200 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class Rodada {
-    private long id;
-    private int pontos;
-    private int qtdeTentativas;
-    private int qtdeAcertos;
-    private int qtdeErros;
-    private int qtdeTentativasRestantes;
-    private Letra[] tentativas;
-    private Letra[] certas;
-    private Letra[] erradas;
-    private Palavra[] palavras;
-    private Tema tema;
+import br.edu.iff.bancodepalavras.dominio.letra.Letra;
+import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
+import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.dominio.ObjetoDominioImpl;
+import br.edu.iff.jogoforca.dominio.boneco.Boneco;
+import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
+import br.edu.iff.jogoforca.dominio.jogador.Jogador;
+
+public class Rodada extends ObjetoDominioImpl{
+    private static int maxPalavras = 3;
+    private static int maxErros = 10;
+    private static int pontosQuandoDescobreTodasAsPalavras = 100;
+    private static int pontosPorLetraEncoberta = 15;
+    private static BonecoFactory bonecoFactory;
+    private List<Item> itens;
+    private Set<Letra> certas;
+    private Set<Letra> erradas;
+    private List<Palavra> palavras;
     private Jogador jogador;
-    private BonecoFactory bonecoFactory;
-    private int pontosPorLetraEncoberta = 15;
-    private int pontosQuandoDescobreTodasAsPalavras = 100;
-    private int maxErros = 10;
-    private int maxPalavras = 3;
-
-    public Rodada(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
-        this.id = id;
-        this.tentativas = new Letra[itens.length];
-        this.certas = new Letra[itens.length];
-        this.qtdeTentativas = 0;
-        this.qtdeAcertos = 0;
-        this.qtdeErros = 0;
-        this.qtdeTentativasRestantes = maxErros;
-        this.jogador = jogador;
-        this.erradas = erradas;
-        for (int i = 0; i < itens.length; i++) {
-            Letra letra = new Letra('_', false);
-            tentativas[i] = letra;
-            for (Letra certa : itens[i].getLetras()) {
-                certa.setEncoberta(true);
-                certas[i] = certa;
-            }
-        }
-    }
-
-    public Rodada(long id, Palavra[] palavras, Jogador jogador) {
-        this.id = id;
-        this.palavras = palavras;
-        this.tentativas = new Letra[palavras.length];
-        this.certas = new Letra[palavras.length];
-        this.qtdeTentativas = 0;
-        this.qtdeAcertos = 0;
-        this.qtdeErros = 0;
-        this.qtdeTentativasRestantes = maxErros;
-        this.jogador = jogador;
-        for (int i = 0; i < palavras.length; i++) {
-            Letra letra = new Letra('_', false);
-            tentativas[i] = letra;
-            for (Letra certa : palavras[i].getLetras()) {
-                certa.setEncoberta(true);
-                certas[i] = certa;
-            }
-        }
-    }
-
-    public void reconstituir(long id, Item[] itens, Letra[] erradas, Jogador jogador) {
-        this.id = id;
-        this.tentativas = new Letra[itens.length];
-        this.certas = new Letra[itens.length];
-        this.qtdeTentativas = 0;
-        this.qtdeAcertos = 0;
-        this.qtdeErros = 0;
-        this.qtdeTentativasRestantes = maxErros;
-        this.jogador = jogador;
-        this.erradas = erradas;
-        for (int i = 0; i < itens.length; i++) {
-            Letra letra = new Letra('_', false);
-            tentativas[i] = letra;
-            for (Letra certa : itens[i].getLetras()) {
-                certa.setEncoberta(true);
-                certas[i] = certa;
-            }
-        }
+    private Tema tema;
+    private Boneco boneco;
+    
+    public static int getMaxPalavras() {
+        return maxPalavras;
     }
     
-    public void criar(long id, Palavra[] palavras, Jogador jogador) {
-        this.id = id;
-        this.palavras = palavras;
+    public static void setMaxPalavras(int maxPalavras) {
+        Rodada.maxPalavras = maxPalavras;
+    }
+    
+    public static int getMaxErros() {
+        return maxErros;
+    }
+    
+    public static void setMaxErros(int maxErros) {
+        Rodada.maxErros = maxErros;
+    }
+    
+    public static int getPontosQuandoDescobreTodasAsPalavras() {
+        return pontosQuandoDescobreTodasAsPalavras;
+    }
+    
+    public static void setPontosQuandoDescobreTodasAsPalavras(int pontosQuandoDescobreTodasAsPalavras) {
+        Rodada.pontosQuandoDescobreTodasAsPalavras = pontosQuandoDescobreTodasAsPalavras;
+    }
+    
+    public static int getPontosPorLetraEncoberta() {
+        return pontosPorLetraEncoberta;
+    }
+    
+    public static void setPontosPorLetraEncoberta(int pontosPorLetraEncoberta) {
+        Rodada.pontosPorLetraEncoberta = pontosPorLetraEncoberta;
+    }
+    
+    public static void setBonecoFactory(BonecoFactory bonecoFactory) {
+        Rodada.bonecoFactory = bonecoFactory;
+    }
+
+    public static BonecoFactory getBonecoFactory() {
+        return bonecoFactory;
+    }
+
+    public static Rodada criar(long id, List<Palavra> palavras, Jogador jogador) {
+        Rodada rodada = new Rodada(id, palavras, jogador);
+        return rodada;
+    }
+    
+    public static Rodada reconstituir(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) {
+        Rodada rodada = new Rodada(id, itens, erradas, jogador);
+        return rodada;
+    }
+    
+    public Rodada(long id, List<Palavra>palavras, Jogador jogador) { //Tem que terminar
+        super(id);
+		this.jogador = jogador;
+		this.certas = new HashSet<Letra>();
+		this.erradas = new HashSet<Letra>();
+		this.itens = new ArrayList<Item>(palavras.size());
+		this.boneco = getBonecoFactory().getBoneco();
+		
+		if(getBonecoFactory() == null) {
+			throw new RuntimeException("Boneco não iniciado");
+
+		}
+		
+		for(int contador = 0; contador < palavras.size(); contador++) {
+			this.itens.add(Item.criar(contador, palavras.get(contador)));
+		}
+    }
+
+    private Rodada(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) { //Tem que terminar
+        super(id);
+        this.itens = new ArrayList<Item>(itens.size());
+		this.erradas = new HashSet<Letra>();
         this.jogador = jogador;
-        this.itens = new Item[palavras.length];
-        this.erradas = new Letra[maxErros];
-        this.tentativas = new Letra[maxErros];
-        this.qtdeTentativas = 0;
-        this.qtdeAcertos = 0;
-        this.qtdeErros = 0;
-        this.qtdeTentativasRestantes = maxErros;
-        this.encerrou = false;
-        this.descobriu = false;
-        this.arriscou = false;
-        this.bonecoFactory = new BonecoFactory();
-        for (int i = 0; i < palavras.length; i++) {
-            this.itens[i] = new Item(palavras[i]);
+		this.certas = new HashSet<Letra>();
+		this.boneco = getBonecoFactory().getBoneco();
+        
+        if(getBonecoFactory() == null) {
+			throw new RuntimeException("Boneco não iniciado");
+		}
+
+		for(int contador = 0; contador < itens.size(); contador++) {
+			Item itemTemp = itens.get(contador);
+			this.itens.add(itemTemp);
+
+			for(Letra corretaTemp: itemTemp.getLetrasDescobertas()) {
+				this.certas.add(corretaTemp);
+			}
+		}
+
+		for(Letra erradaTemp: erradas ) {
+			this.erradas.add(erradaTemp);
+		}
+    }
+
+    public Jogador getJogador() {
+        return this.jogador;
+    }
+
+    public Tema getTema() {
+        return tema;
+    }
+
+    public List<Palavra> getPalavras() {
+        return palavras;
+    }
+
+    public int getNumPalavras() {
+        return palavras.size();
+    }
+
+    public void tentar(char codigo) { //Tem que terminar
+        if (encerrou()) {
+            return;
         }
+    }
+
+    public void arriscar(List<String> codigo) {
+        if (encerrou()) {
+			return;
+		}
+		
     }
     
     public void exibirItens(Object contexto) {
-        System.out.println("ITENS DA RODADA:");
-        System.out.println("-----------------");
-
-        // exibe o tema da rodada
-        System.out.println("TEMA: " + tema.getNome());
-
-        // exibe o jogador atual
-        System.out.println("JOGADOR: " + jogador.getNome());
-
-        // exibe as palavras da rodada
-        System.out.println("PALAVRAS:");
-        for (Palavra palavra : palavras) {
-            System.out.println("- " + palavra.getPalavraEncoberta());
-        }
-
-        // exibe as letras erradas
-        System.out.println("LETRAS ERRADAS:");
-        for (Letra letra : erradas) {
-            System.out.print(letra.getCodigo() + " ");
-        }
-        System.out.println();
-
-        // exibe as letras certas
-        System.out.println("LETRAS CERTAS:");
-        for (Letra letra : certas) {
-            System.out.print(letra.getCodigo() + " ");
-        }
-        System.out.println();
-
-        // exibe as letras tentadas
-        System.out.println("LETRAS TENTADAS:");
-        for (Letra letra : tentativas) {
-            System.out.print(letra.getCodigo() + " ");
-        }
-        System.out.println();
-
-        // exibe a quantidade de tentativas restantes
-        System.out.println("TENTATIVAS RESTANTES: " + getQtdeTentativasRestantes());
-
-        // exibe o boneco da forca
-        BonecoFactory bonecoFactory = getBonecoFactory();
-        if (bonecoFactory != null) {
-            Boneco boneco = bonecoFactory.criarBoneco(getQtdeErros());
-            System.out.println("BONECO:");
-            System.out.println(boneco.desenhar());
+        for(Item itemTemp : itens) {
+            itemTemp.exibir(contexto);
+            System.out.println();
         }
     }
-   
-  
-    
+
+    public boolean encerrou(){
+        if (arriscou() || descobriu() || getQtdeErros() == maxErros) {
+            return true;
+        }
+        return false;
+    }
+
+	public boolean descobriu() {
+		for (Item i : this.itens) {
+			if (!i.descobriu()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+    public boolean arriscou(){
+        for(Item i: itens) {
+			if(!i.arriscou()) {
+				return false;
+			}
+		}
+        return true;
+    }
+
+	public int getQtdeTentativaRestantes(){
+		return getMaxErros() - erradas.size();
+	}
+
+	public int getQtdeErros() {
+		return erradas.size();
+	}
+
+	public int getQtdeAcertos() {
+		return certas.size();
+	}
+
+	public int getQtdeTentativas() {
+		return getQtdeErros() + getQtdeAcertos();
+	}
+}

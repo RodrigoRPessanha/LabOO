@@ -11,13 +11,17 @@ import br.edu.iff.repository.RepositoryException;
 
 public class MemoriaPalavraRepository implements PalavraRepository {
 
+    // Criação de uma única instância da classe MemoriaPalavraRepository, seguindo o padrão Singleton
     private static MemoriaPalavraRepository soleInstance = null;
+    // Lista de palavras em memória
     private List<Palavra> pool;
 
+    // Construtor da classe que inicializa a lista de palavras
     private MemoriaPalavraRepository() {
         this.pool = new ArrayList<Palavra>();
     }
 
+    // Método estático para obter a única instância da classe MemoriaPalavraRepository, seguindo o padrão Singleton
     public static MemoriaPalavraRepository getSoleInstance() {
         if (soleInstance == null) {
             soleInstance = new MemoriaPalavraRepository();
@@ -25,37 +29,45 @@ public class MemoriaPalavraRepository implements PalavraRepository {
         return soleInstance;
     }
 
+    // Retorna uma palavra com o ID informado, se existir
     @Override
     public Palavra getPorId(long id) {
-        for (Palavra palavra : this.pool) {
-            if (palavra.getId() == id) {
-                return palavra;
+        try {
+            for (Palavra palavra : this.pool) {
+                if (palavra.getId() == id) {
+                    return palavra;
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
-        throw new RuntimeException("Não existe nenhuma palavra com o id: " + id);
+        return null;
     }
 
+    // Retorna uma lista de palavras associadas a um tema específico
     @Override
     public List<Palavra> getPorTema(Tema tema) {
-
         List<Palavra> palavraList = new ArrayList<>();
-        for (Palavra palavra : this.pool) {
-            if (palavra.getTema() == tema) {
-                palavraList.add(palavra);
+        try {
+            for (Palavra palavra : this.pool) {
+                if (palavra.getTema() == tema) {
+                    palavraList.add(palavra);
+                }
             }
-        }
-        if (!palavraList.isEmpty()) {
             return palavraList;
-        } else {
-            throw new RuntimeException("Não existe nenhuma palavra com o Tema: " + tema);
+        } catch (Exception e) {
+            return palavraList;
         }
+
     }
 
+    // Retorna todas as palavras na lista, protegendo-a de modificações externas
     @Override
     public List<Palavra> getTodas() {
         return Collections.unmodifiableList(this.pool);
     }
 
+    // Retorna uma palavra com o nome informado, se existir
     @Override
     public Palavra getPalavra(String palavra) {
 
@@ -69,12 +81,14 @@ public class MemoriaPalavraRepository implements PalavraRepository {
 
     }
 
+    // Retorna o próximo ID disponível
     @Override
     public long getProximoId() {
         int novaProxId = pool.size() + 1;
         return novaProxId;
     }
 
+    // Insere uma nova palavra na lista
     @Override
     public void inserir(Palavra palavra) throws RepositoryException {
         if (this.pool.contains(palavra)) {
@@ -84,11 +98,13 @@ public class MemoriaPalavraRepository implements PalavraRepository {
         }
     }
 
+    // Método para atualizar uma palavra no repositório (não implementado)
     @Override
     public void atualizar(Palavra palavra) throws RepositoryException {
 
     }
 
+    // Método para remover uma palavra do repositório
     @Override
     public void remover(Palavra palavra) throws RepositoryException {
         if (this.pool.contains(palavra)) {
