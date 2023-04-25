@@ -12,6 +12,6 @@ public class LetraTexto extends Letra{
 	// Implementa o método exibir da classe Letra
 	@Override
 	public void exibir(Object contexto){
-		System.out.println(contexto);
+		System.out.print(contexto);
 	}
 }

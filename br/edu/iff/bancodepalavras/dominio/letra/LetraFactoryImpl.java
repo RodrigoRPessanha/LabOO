@@ -33,7 +33,7 @@ public abstract class LetraFactoryImpl implements LetraFactory {
     @Override
     public final Letra getLetraEncoberta() {
         if (this.encoberta == null) {
-            char codigo = '*';
+            char codigo = '_';
             this.encoberta = criarLetra(codigo);
         }
         return this.encoberta;

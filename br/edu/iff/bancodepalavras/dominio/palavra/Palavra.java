@@ -95,7 +95,7 @@ public class Palavra extends ObjetoDominioImpl{
 			if(posicoes.get(contador)) {
 				palavra.get(contador).exibir(palavra.get(contador));
 			}else {
-				letraEncoberta.exibir("*");
+				letraEncoberta.exibir("_");
 			}
 		}
 	}
