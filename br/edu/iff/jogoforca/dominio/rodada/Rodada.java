@@ -1,11 +1,14 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
+import br.edu.iff.bancodepalavras.dominio.letra.LetraFactory;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
 import br.edu.iff.dominio.ObjetoDominioImpl;
@@ -77,7 +80,7 @@ public class Rodada extends ObjetoDominioImpl{
         return rodada;
     }
     
-    public Rodada(long id, List<Palavra>palavras, Jogador jogador) { //Tem que terminar
+    public Rodada(long id, List<Palavra>palavras, Jogador jogador) {
         super(id);
 		this.jogador = jogador;
 		this.certas = new HashSet<Letra>();
@@ -95,7 +98,7 @@ public class Rodada extends ObjetoDominioImpl{
 		}
     }
 
-    private Rodada(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) { //Tem que terminar
+    private Rodada(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) {
         super(id);
         this.itens = new ArrayList<Item>(itens.size());
 		this.erradas = new HashSet<Letra>();
@@ -141,13 +144,37 @@ public class Rodada extends ObjetoDominioImpl{
         if (encerrou()) {
             return;
         }
+
+        Map<Item, Boolean> itensCertos = new HashMap<Item, Boolean>();
+		LetraFactory letraFactory = Palavra.getLetraFactory();
+
+		for(Item itemTemp: itens) {
+			if(itemTemp.tentar(codigo)) {
+				certas.add(letraFactory.getLetra(codigo));
+				itensCertos.put(itemTemp, true);
+			}else {
+				itensCertos.put(itemTemp, false);
+			}
+		}
+		if(!itensCertos.containsValue(true)) {
+			erradas.add(letraFactory.getLetra(codigo));
+		}
+		if(encerrou()) {
+			this.jogador.setPontuacao(this.calcularPontos());
+		}
     }
 
-    public void arriscar(List<String> codigo) {
+    public void arriscar(List<String> palavras) {
         if (encerrou()) {
 			return;
 		}
-		
+
+		for(int contador = 0; contador < palavras.size(); contador++) {
+			itens.get(contador).arriscar(palavras.get(contador));
+		}
+		if(encerrou()) {
+			this.jogador.setPontuacao(this.calcularPontos());
+		}
     }
     
     public void exibirItens(Object contexto) {
@@ -157,6 +184,57 @@ public class Rodada extends ObjetoDominioImpl{
         }
     }
 
+    public void exibirBoneco(Object object) {
+		boneco.exibir(object, getQtdeErros());
+
+	}
+
+	public void exibirPalavras(Object object) {
+		for(Palavra palavraTemp: getPalavras()) {
+			palavraTemp.exibir(object);
+			System.out.println();
+		}
+	}
+    
+    public void exibirLetrasErradas(Object contexto) {
+        for (Letra letra : erradas) {
+            letra.exibir(contexto);
+            System.out.print(" ");
+        }
+    }
+
+    public Set<Letra> getTentativas() {
+		Set<Letra> tentativasTemp = new HashSet<Letra>();
+		tentativasTemp.addAll(certas);
+		tentativasTemp.addAll(erradas);
+		return tentativasTemp;
+	}
+
+	public Set<Letra> getCertas() {
+		Set<Letra> certasTemp = new HashSet<Letra>();
+		certasTemp.addAll(certas);
+		return certasTemp;
+	}
+
+	public Set<Letra> getErradas() {
+		Set<Letra> erradasTemp = new HashSet<Letra>();
+		erradasTemp.addAll(erradas);
+		return erradasTemp;
+	}
+
+	public int calcularPontos() {
+		if(!descobriu()) {
+			return 0;
+		}
+
+		int pontosTemp = getPontosQuandoDescobreTodasAsPalavras();
+		for(Item itemTemp: itens) {
+			pontosTemp = pontosTemp + itemTemp.calcularPontosLetrasEncobertas(getPontosPorLetraEncoberta());
+		}
+		return pontosTemp;
+
+	}
+    
     public boolean encerrou(){
         if (arriscou() || descobriu() || getQtdeErros() == maxErros) {
             return true;
