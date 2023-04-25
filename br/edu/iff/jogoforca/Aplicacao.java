@@ -1,7 +1,5 @@
 package br.edu.iff.jogoforca;
 
-import java.util.Arrays;
-
 import br.edu.iff.bancodepalavras.dominio.letra.LetraFactory;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.palavra.PalavraAppService;
