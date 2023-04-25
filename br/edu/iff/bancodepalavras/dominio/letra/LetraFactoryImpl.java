@@ -32,8 +32,8 @@ public abstract class LetraFactoryImpl implements LetraFactory {
     // Retorna uma instância da classe LetraEncoberta, que representa uma letra não revelada em um jogo de palavras
     @Override
     public final Letra getLetraEncoberta() {
-        if (encoberta == null) {
-            char codigo = '?';
+        if (this.encoberta == null) {
+            char codigo = '*';
             this.encoberta = criarLetra(codigo);
         }
         return this.encoberta;

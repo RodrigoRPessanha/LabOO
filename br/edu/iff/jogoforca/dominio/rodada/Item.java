@@ -29,7 +29,11 @@ public class Item extends ObjetoDominioImpl{
 
     // Método estático para criar um novo objeto Item com apenas a palavra como parâmetro
 	static Item criar(int id, Palavra palavra){
-        Item item = new Item(id, palavra);
+        List<Boolean> posicoesDescobertas = new ArrayList<Boolean>();
+        for(int i=0; i<palavra.getTamanho();i++){
+            posicoesDescobertas.add(i, false);
+        }
+        Item item = new Item(id, palavra, posicoesDescobertas, null);
         return item;
 	}
 
@@ -99,13 +103,7 @@ public class Item extends ObjetoDominioImpl{
     
     // Retorna a quantidade de letras ainda não descobertas
     public int qtdeLetrasEncobertas() {
-        int qtde = 0;
-        for (boolean b : posicoesDescobertas) {
-            if (b) {
-                qtde++;
-            }
-        }
-        return qtde;
+        return this.getLetrasEncobertas().size();
     }
 
     // Retorna uma lista com as letras ainda não descobertas da palavra

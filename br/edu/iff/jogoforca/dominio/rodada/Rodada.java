@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.print.event.PrintEvent;
+
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.letra.LetraFactory;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
@@ -17,7 +19,7 @@ import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 
 public class Rodada extends ObjetoDominioImpl{
-    private static int maxPalavras = 3;
+    private static int maxPalavras = 1;
     private static int maxErros = 10;
     private static int pontosQuandoDescobreTodasAsPalavras = 100;
     private static int pontosPorLetraEncoberta = 15;
@@ -85,7 +87,11 @@ public class Rodada extends ObjetoDominioImpl{
 		this.jogador = jogador;
 		this.certas = new HashSet<Letra>();
 		this.erradas = new HashSet<Letra>();
-		this.itens = new ArrayList<Item>(palavras.size());
+		this.itens = new ArrayList<Item>();
+		this.palavras = palavras;
+        for (int i = 0; i < palavras.size(); i++) {
+			this.itens.add(Item.criar(i, palavras.get(i)));
+        }
 		this.boneco = getBonecoFactory().getBoneco();
 		
 		if(getBonecoFactory() == null) {
@@ -100,7 +106,10 @@ public class Rodada extends ObjetoDominioImpl{
 
     private Rodada(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) {
         super(id);
-        this.itens = new ArrayList<Item>(itens.size());
+        this.itens = new ArrayList<Item>();
+		for (int i = 0; i < palavras.size(); i++) {
+			this.itens.add(Item.criar(i, palavras.get(i)));
+        }
 		this.erradas = new HashSet<Letra>();
         this.jogador = jogador;
 		this.certas = new HashSet<Letra>();
@@ -129,7 +138,10 @@ public class Rodada extends ObjetoDominioImpl{
     }
 
     public Tema getTema() {
-        return tema;
+        if (itens.size() == 0) {
+            throw new IllegalStateException("itens tem que conter ao menos um item");
+        }
+        return itens.get(0).getPalavra().getTema();
     }
 
     public List<Palavra> getPalavras() {
@@ -165,21 +177,18 @@ public class Rodada extends ObjetoDominioImpl{
     }
 
     public void arriscar(List<String> palavras) {
-        if (encerrou()) {
+        if (this.encerrou()) {
 			return;
 		}
-
-		for(int contador = 0; contador < palavras.size(); contador++) {
-			itens.get(contador).arriscar(palavras.get(contador));
-		}
-		if(encerrou()) {
-			this.jogador.setPontuacao(this.calcularPontos());
+        itens.get(0).arriscar(palavras.get(0));
+		if(this.encerrou()) {
+            this.jogador.setPontuacao(this.calcularPontos());
 		}
     }
     
     public void exibirItens(Object contexto) {
-        for(Item itemTemp : itens) {
-            itemTemp.exibir(contexto);
+        for(int i = 0;i < this.itens.size()/2;i++) {
+            itens.get(i).exibir(itens.get(i));
             System.out.println();
         }
     }
@@ -191,14 +200,14 @@ public class Rodada extends ObjetoDominioImpl{
 
 	public void exibirPalavras(Object object) {
 		for(Palavra palavraTemp: getPalavras()) {
-			palavraTemp.exibir(object);
+			palavraTemp.exibir(palavraTemp);
 			System.out.println();
 		}
 	}
     
     public void exibirLetrasErradas(Object contexto) {
         for (Letra letra : erradas) {
-            letra.exibir(contexto);
+            letra.exibir(letra);
             System.out.print(" ");
         }
     }
@@ -244,24 +253,24 @@ public class Rodada extends ObjetoDominioImpl{
 
 	public boolean descobriu() {
 		for (Item i : this.itens) {
-			if (!i.descobriu()) {
-				return false;
+			if (i.descobriu()) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
     public boolean arriscou(){
         for(Item i: itens) {
-			if(!i.arriscou()) {
-				return false;
+			if(i.arriscou()) {
+				return true;
 			}
 		}
-        return true;
+        return false;
     }
 
 	public int getQtdeTentativaRestantes(){
-		return getMaxErros() - erradas.size();
+		return maxErros - getQtdeErros();
 	}
 
 	public int getQtdeErros() {

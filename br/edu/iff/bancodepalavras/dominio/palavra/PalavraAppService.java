@@ -39,7 +39,7 @@ public class PalavraAppService {
     }
     Palavra novaPalavra = palavraFactory.getPalavra(palavra, tema);
     try {
-			palavraRepository.inserir(novaPalavra);
+      palavraRepository.inserir(novaPalavra);
 			return true;
 		} catch (Exception e) {
 			return false;
