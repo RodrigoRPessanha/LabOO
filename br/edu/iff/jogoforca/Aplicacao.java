@@ -27,7 +27,7 @@ import br.edu.iff.jogoforca.texto.ElementoGraficoTextoFactory;
 
 public class Aplicacao {
     
-    private static Aplicacao soleInstance = new Aplicacao();
+    private static Aplicacao soleInstance = null;
     
     private static final String[] TIPOS_REPOSITORY_FACTORY = {"memoria", "relacional"};
     private static final String[] TIPOS_ELEMENTO_GRAFICO_FACTORY = {"texto", "imagem"};
@@ -40,6 +40,10 @@ public class Aplicacao {
     private Aplicacao() {}
     
     public static Aplicacao getSoleInstance() {
+        if (soleInstance == null) {
+            soleInstance = new Aplicacao();
+        }
+
         return soleInstance;
     }
     
