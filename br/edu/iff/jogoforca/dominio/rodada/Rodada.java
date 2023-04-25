@@ -1,22 +1,27 @@
 package br.edu.iff.jogoforca.dominio.rodada;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.edu.iff.bancodepalavras.dominio.letra.Letra;
 import br.edu.iff.bancodepalavras.dominio.palavra.Palavra;
 import br.edu.iff.bancodepalavras.dominio.tema.Tema;
+import br.edu.iff.dominio.ObjetoDominioImpl;
 import br.edu.iff.jogoforca.dominio.boneco.Boneco;
 import br.edu.iff.jogoforca.dominio.boneco.BonecoFactory;
 import br.edu.iff.jogoforca.dominio.jogador.Jogador;
 
-public class Rodada extends br.edu.iff.dominio.ObjetoDominioImpl{
+public class Rodada extends ObjetoDominioImpl{
     private static int maxPalavras = 3;
     private static int maxErros = 10;
     private static int pontosQuandoDescobreTodasAsPalavras = 100;
     private static int pontosPorLetraEncoberta = 15;
     private static BonecoFactory bonecoFactory;
     private List<Item> itens;
-    private List<Letra> erradas;
+    private Set<Letra> certas;
+    private Set<Letra> erradas;
     private List<Palavra> palavras;
     private Jogador jogador;
     private Boneco boneco;
@@ -74,15 +79,46 @@ public class Rodada extends br.edu.iff.dominio.ObjetoDominioImpl{
     
     public Rodada(long id, List<Palavra>palavras, Jogador jogador) { //Tem que terminar
         super(id);
-        this.palavras = palavras;
-        this.jogador = jogador;
+		this.jogador = jogador;
+		this.certas = new HashSet<Letra>();
+		this.erradas = new HashSet<Letra>();
+		this.itens = new ArrayList<Item>(palavras.size());
+		this.boneco = getBonecoFactory().getBoneco();
+		
+		if(getBonecoFactory() == null) {
+			throw new RuntimeException("Boneco não iniciado");
+
+		}
+		
+		for(int contador = 0; contador < palavras.size(); contador++) {
+			this.itens.add(Item.criar(contador, palavras.get(contador)));
+		}
     }
 
     private Rodada(long id, List<Item> itens, List<Letra> erradas, Jogador jogador) { //Tem que terminar
         super(id);
-        this.itens = itens;
-        this.erradas = erradas;
+        this.itens = new ArrayList<Item>(itens.size());
+		this.erradas = new HashSet<Letra>();
         this.jogador = jogador;
+		this.certas = new HashSet<Letra>();
+		this.boneco = getBonecoFactory().getBoneco();
+        
+        if(getBonecoFactory() == null) {
+			throw new RuntimeException("Boneco não iniciado");
+		}
+
+		for(int contador = 0; contador < itens.size(); contador++) {
+			Item itemTemp = itens.get(contador);
+			this.itens.add(itemTemp);
+
+			for(Letra corretaTemp: itemTemp.getLetrasDescobertas()) {
+				this.certas.add(corretaTemp);
+			}
+		}
+
+		for(Letra erradaTemp: erradas ) {
+			this.erradas.add(erradaTemp);
+		}
     }
 
     public Jogador getJogador() {
@@ -122,19 +158,43 @@ public class Rodada extends br.edu.iff.dominio.ObjetoDominioImpl{
     }
 
     public boolean encerrou(){
-        if (arriscou() || descobriu() || qtdeErros() == maxErros) {
+        if (arriscou() || descobriu() || getQtdeErros() == maxErros) {
             return true;
         }
         return false;
     }
 
 	public boolean descobriu() {
-		for (Palavra p : this.palavras) {
-			if (!p.estaDescoberta()) {
+		for (Item i : this.itens) {
+			if (!i.descobriu()) {
 				return false;
 			}
 		}
 		return true;
 	}
 	
+    public boolean arriscou(){
+        for(Item i: itens) {
+			if(!i.arriscou()) {
+				return false;
+			}
+		}
+        return true;
+    }
+
+	public int getQtdeTentativaRestantes(){
+		return getMaxErros() - erradas.size();
+	}
+
+	public int getQtdeErros() {
+		return erradas.size();
+	}
+
+	public int getQtdeAcertos() {
+		return certas.size();
+	}
+
+	public int getQtdeTentativas() {
+		return getQtdeErros() + getQtdeAcertos();
+	}
 }
